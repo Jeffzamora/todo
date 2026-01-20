@@ -1,0 +1,16 @@
+RewriteEngine On
+
+# Pasar Authorization a PHP (varias formas, por compatibilidad)
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+SetEnvIfNoCase Authorization "(.+)" HTTP_AUTHORIZATION=$1
+
+# Si existe archivo o carpeta, servirlo normal
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Todo lo demás va a index.php
+RewriteRule ^ index.php [L]
+
